@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = "postgresql://jumboapp:698dc19d489c4e4db73e28a713eab07b@0.0.0.0:5432/jumbo?schema=public"
 }
 
 model User {
