@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "build": "tsc",
   "runBuild": "pm2 start ecosystem.yml --only node-app",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf lib/ && npx -p typescript tsc && cp -R src/assets/ lib/assets/",
     "dev": "tsx watch src/server.ts"
   },
   "keywords": [],
