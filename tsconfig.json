@@ -6,6 +6,7 @@
     "lib": ["esnext"],
     "esModuleInterop": true,
     "typeRoots": ["./node_modules/@types", "./src/types"],
-    "module": "commonjs",
+    "rootDir": "src",
+    "include": ["src/"]
   }
 }
