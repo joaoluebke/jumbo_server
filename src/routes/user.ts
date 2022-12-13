@@ -16,7 +16,7 @@ export async function userRoutes(fastify: FastifyInstance) {
     const { id } = getUserParams.parse(request.params);
     const user = await prisma.user.findMany({
       where: {
-        id: id,
+        id: parseInt(id),
       },
     });
 
@@ -49,7 +49,7 @@ export async function userRoutes(fastify: FastifyInstance) {
 
     await prisma.user.deleteMany({
       where: {
-        id: id,
+        id: parseInt(id),
       },
     });
 
@@ -60,7 +60,7 @@ export async function userRoutes(fastify: FastifyInstance) {
     const createUser = z.object({
       name: z.string(),
       email: z.string(),
-      password: z.boolean(),
+      password: z.string(),
       ruleId: z.number(),
     });
 
@@ -73,7 +73,7 @@ export async function userRoutes(fastify: FastifyInstance) {
 
     await prisma.user.update({
       where: {
-        id: id,
+        id: parseInt(id),
       },
       data: user,
     });

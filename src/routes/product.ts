@@ -135,7 +135,7 @@ export async function productRoutes(fastify: FastifyInstance) {
     url: "/upload-file-aws",
     preHandler: upload.single("image"),
     handler: async function (request, reply) {
-      const { file } = request;
+      const { file }:any = request;
       const uploadImageService = new UploadImageService();
       const url = await uploadImageService.execute(file);
 
@@ -162,7 +162,7 @@ export async function productRoutes(fastify: FastifyInstance) {
     method: "DELETE",
     url: "/:filename",
     handler: async function (request, reply) {
-      const { filename } = request.params;
+      const { filename }:any = request.params;
       const deleteImageService = new DeleteImageService();
       await deleteImageService.execute(filename);
       // request.body contains the text fields
