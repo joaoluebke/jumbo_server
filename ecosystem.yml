@@ -1,6 +1,6 @@
 apps:
-  - name: "node-app"
-    script: "./dist/src/main.js"
+  - name: "server"
+    script: "./dist/server.js"
     node_args: "-r ts-node/register -r tsconfig-paths/register"
     kill_timeout: 10000
     instances: max
