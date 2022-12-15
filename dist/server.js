@@ -68,7 +68,7 @@ var product_1 = require("./routes/product");
 var user_1 = require("./routes/user");
 var category_1 = require("./routes/category");
 var subCategory_1 = require("./routes/subCategory");
-// import jwt from "@fastify/jwt";
+var jwt_1 = __importDefault(require("@fastify/jwt"));
 var fastify_multer_1 = __importDefault(require("fastify-multer"));
 var dotenv = __importStar(require("dotenv"));
 dotenv.config(); // Load the environment variables
@@ -89,15 +89,17 @@ function bootstrap() {
                         })];
                 case 2:
                     _a.sent();
-                    // await fastify.register(jwt, {
-                    //   secret: process.env.JWT_SECRET,
-                    // });
+                    return [4 /*yield*/, fastify.register(jwt_1["default"], {
+                            secret: process.env.JWT_SECRET
+                        })];
+                case 3:
+                    _a.sent();
                     fastify.register(product_1.productRoutes);
                     fastify.register(user_1.userRoutes);
                     fastify.register(category_1.categoryRoutes);
                     fastify.register(subCategory_1.subCategoryRoutes);
                     return [4 /*yield*/, fastify.listen({ port: 3333, host: '0.0.0.0' })];
-                case 3:
+                case 4:
                     _a.sent();
                     return [2 /*return*/];
             }
