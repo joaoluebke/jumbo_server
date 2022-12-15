@@ -39,11 +39,14 @@ exports.__esModule = true;
 exports.userRoutes = void 0;
 var prisma_1 = require("../lib/prisma");
 var zod_1 = require("zod");
+var authenticate_1 = require("../plugins/authenticate");
 function userRoutes(fastify) {
     return __awaiter(this, void 0, void 0, function () {
         var _this = this;
         return __generator(this, function (_a) {
-            fastify.get("/users", function () { return __awaiter(_this, void 0, void 0, function () {
+            fastify.get("/users", {
+                onRequest: [authenticate_1.authenticate]
+            }, function () { return __awaiter(_this, void 0, void 0, function () {
                 var users;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -54,7 +57,9 @@ function userRoutes(fastify) {
                     }
                 });
             }); });
-            fastify.get("/users/:id", function (request) { return __awaiter(_this, void 0, void 0, function () {
+            fastify.get("/users/:id", {
+                onRequest: [authenticate_1.authenticate]
+            }, function (request) { return __awaiter(_this, void 0, void 0, function () {
                 var getUserParams, id, user;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -74,7 +79,9 @@ function userRoutes(fastify) {
                     }
                 });
             }); });
-            fastify.post("/user", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
+            fastify.post("/user", {
+                onRequest: [authenticate_1.authenticate]
+            }, function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
                 var createUser, user;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -95,7 +102,9 @@ function userRoutes(fastify) {
                     }
                 });
             }); });
-            fastify["delete"]("/user/:id", function (request) { return __awaiter(_this, void 0, void 0, function () {
+            fastify["delete"]("/user/:id", {
+                onRequest: [authenticate_1.authenticate]
+            }, function (request) { return __awaiter(_this, void 0, void 0, function () {
                 var getUserId, id;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -115,7 +124,9 @@ function userRoutes(fastify) {
                     }
                 });
             }); });
-            fastify.put("/usuário/:id", function (request) { return __awaiter(_this, void 0, void 0, function () {
+            fastify.put("/usuário/:id", {
+                onRequest: [authenticate_1.authenticate]
+            }, function (request) { return __awaiter(_this, void 0, void 0, function () {
                 var createUser, getUserId, id, user;
                 return __generator(this, function (_a) {
                     switch (_a.label) {

@@ -39,11 +39,14 @@ exports.__esModule = true;
 exports.categoryRoutes = void 0;
 var prisma_1 = require("../lib/prisma");
 var zod_1 = require("zod");
+var authenticate_1 = require("../plugins/authenticate");
 function categoryRoutes(fastify) {
     return __awaiter(this, void 0, void 0, function () {
         var _this = this;
         return __generator(this, function (_a) {
-            fastify.get("/categories", function () { return __awaiter(_this, void 0, void 0, function () {
+            fastify.get("/categories", {
+                onRequest: [authenticate_1.authenticate]
+            }, function () { return __awaiter(_this, void 0, void 0, function () {
                 var categories;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -54,7 +57,9 @@ function categoryRoutes(fastify) {
                     }
                 });
             }); });
-            fastify.get("/categories/:id", function (request) { return __awaiter(_this, void 0, void 0, function () {
+            fastify.get("/categories/:id", {
+                onRequest: [authenticate_1.authenticate]
+            }, function (request) { return __awaiter(_this, void 0, void 0, function () {
                 var getCategoryParams, id, category;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -74,7 +79,9 @@ function categoryRoutes(fastify) {
                     }
                 });
             }); });
-            fastify.post("/categories", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
+            fastify.post("/categories", {
+                onRequest: [authenticate_1.authenticate]
+            }, function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
                 var createCategory, category;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -92,7 +99,9 @@ function categoryRoutes(fastify) {
                     }
                 });
             }); });
-            fastify["delete"]("/categories/:id", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
+            fastify["delete"]("/categories/:id", {
+                onRequest: [authenticate_1.authenticate]
+            }, function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
                 var getCategoryId, id;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -112,7 +121,9 @@ function categoryRoutes(fastify) {
                     }
                 });
             }); });
-            fastify.put("/categories/:id", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
+            fastify.put("/categories/:id", {
+                onRequest: [authenticate_1.authenticate]
+            }, function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
                 var createCategory, getCategoryId, id, category;
                 return __generator(this, function (_a) {
                     switch (_a.label) {

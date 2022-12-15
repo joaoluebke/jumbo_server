@@ -1,82 +1,112 @@
 import { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma";
 import { z } from "zod";
-import { hash } from "bcrypt";
+import { authenticate } from "../plugins/authenticate";
 
 export async function userRoutes(fastify: FastifyInstance) {
-  fastify.get("/users", async () => {
-    const users = await prisma.product.findMany();
-    return { users };
-  });
+  fastify.get(
+    "/users",
+    {
+      onRequest: [authenticate],
+    },
+    async () => {
+      const users = await prisma.product.findMany();
+      return { users };
+    }
+  );
 
-  fastify.get("/users/:id", async (request) => {
-    const getUserParams = z.object({
-      id: z.string(),
-    });
-    const { id } = getUserParams.parse(request.params);
-    const user = await prisma.user.findMany({
-      where: {
-        id: parseInt(id),
-      },
-    });
+  fastify.get(
+    "/users/:id",
+    {
+      onRequest: [authenticate],
+    },
+    async (request) => {
+      const getUserParams = z.object({
+        id: z.string(),
+      });
+      const { id } = getUserParams.parse(request.params);
+      const user = await prisma.user.findMany({
+        where: {
+          id: parseInt(id),
+        },
+      });
 
-    return { user };
-  });
+      return { user };
+    }
+  );
 
-  fastify.post("/user", async (request, reply) => {
-    const createUser = z.object({
-      name: z.string(),
-      email: z.string(),
-      password: z.string(),
-      ruleId: z.number(),
-    });
+  fastify.post(
+    "/user",
+    {
+      onRequest: [authenticate],
+    },
+    async (request, reply) => {
+      const createUser = z.object({
+        name: z.string(),
+        email: z.string(),
+        password: z.string(),
+        ruleId: z.number(),
+      });
 
-    const user = createUser.parse(request.body);
-    await prisma.user.create({
-      data: user,
-    });
+      const user = createUser.parse(request.body);
+      await prisma.user.create({
+        data: user,
+      });
 
-    return console.log("usuário: ", user);
-  });
+      return console.log("usuário: ", user);
+    }
+  );
 
-  fastify.delete("/user/:id", async (request) => {
-    const getUserId = z.object({
-      id: z.string(),
-    });
+  fastify.delete(
+    "/user/:id",
+    {
+      onRequest: [authenticate],
+    },
+    async (request) => {
+      const getUserId = z.object({
+        id: z.string(),
+      });
 
-    const { id } = getUserId.parse(request.params);
+      const { id } = getUserId.parse(request.params);
 
-    await prisma.user.deleteMany({
-      where: {
-        id: parseInt(id),
-      },
-    });
+      await prisma.user.deleteMany({
+        where: {
+          id: parseInt(id),
+        },
+      });
 
-    return console.log("usuário deletado");
-  });
+      return console.log("usuário deletado");
+    }
+  );
 
-  fastify.put("/usuário/:id", async (request) => {
-    const createUser = z.object({
-      name: z.string(),
-      email: z.string(),
-      password: z.string(),
-      ruleId: z.number(),
-    });
+  fastify.put(
+    "/usuário/:id",
+    {
+      onRequest: [authenticate],
+    },
+    async (request) => {
+      const createUser = z.object({
+        name: z.string(),
+        email: z.string(),
+        password: z.string(),
+        ruleId: z.number(),
+      });
 
-    const getUserId = z.object({
-      id: z.string(),
-    });
+      const getUserId = z.object({
+        id: z.string(),
+      });
 
-    const { id } = getUserId.parse(request.params);
-    const user = createUser.parse(request.body);
+      const { id } = getUserId.parse(request.params);
+      const user = createUser.parse(request.body);
 
-    await prisma.user.update({
-      where: {
-        id: parseInt(id),
-      },
-      data: user,
-    });
+      await prisma.user.update({
+        where: {
+          id: parseInt(id),
+        },
+        data: user,
+      });
 
-    return console.log("usuário atualizado");
-  });
+      return console.log("usuário atualizado");
+    }
+  );
 }

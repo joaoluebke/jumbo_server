@@ -39,11 +39,14 @@ exports.__esModule = true;
 exports.subCategoryRoutes = void 0;
 var prisma_1 = require("../lib/prisma");
 var zod_1 = require("zod");
+var authenticate_1 = require("../plugins/authenticate");
 function subCategoryRoutes(fastify) {
     return __awaiter(this, void 0, void 0, function () {
         var _this = this;
         return __generator(this, function (_a) {
-            fastify.get("/subcategories", function () { return __awaiter(_this, void 0, void 0, function () {
+            fastify.get("/subcategories", {
+                onRequest: [authenticate_1.authenticate]
+            }, function () { return __awaiter(_this, void 0, void 0, function () {
                 var subcategories;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -54,7 +57,9 @@ function subCategoryRoutes(fastify) {
                     }
                 });
             }); });
-            fastify.get("/subcategories/:id", function (request) { return __awaiter(_this, void 0, void 0, function () {
+            fastify.get("/subcategories/:id", {
+                onRequest: [authenticate_1.authenticate]
+            }, function (request) { return __awaiter(_this, void 0, void 0, function () {
                 var getSubCategoryParams, id, subcategory;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -74,7 +79,9 @@ function subCategoryRoutes(fastify) {
                     }
                 });
             }); });
-            fastify.post("/subcategories", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
+            fastify.post("/subcategories", {
+                onRequest: [authenticate_1.authenticate]
+            }, function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
                 var createSubCategory, subCategory;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -93,7 +100,9 @@ function subCategoryRoutes(fastify) {
                     }
                 });
             }); });
-            fastify["delete"]("/subcategories/:id", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
+            fastify["delete"]("/subcategories/:id", {
+                onRequest: [authenticate_1.authenticate]
+            }, function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
                 var getSubCategoryId, id;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -113,7 +122,9 @@ function subCategoryRoutes(fastify) {
                     }
                 });
             }); });
-            fastify.put("/subcategories/:id", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
+            fastify.put("/subcategories/:id", {
+                onRequest: [authenticate_1.authenticate]
+            }, function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
                 var createSubCategory, getSubCategoryId, id, subCategory;
                 return __generator(this, function (_a) {
                     switch (_a.label) {

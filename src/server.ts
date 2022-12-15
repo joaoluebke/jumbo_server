@@ -19,6 +19,8 @@ async function bootstrap() {
     origin: true,
   });
 
+  console.log(process.env.JWT_SECRET);
+
   await fastify.register(jwt, {
     secret: process.env.JWT_SECRET,
   });

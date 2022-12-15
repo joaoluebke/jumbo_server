@@ -89,6 +89,7 @@ function bootstrap() {
                         })];
                 case 2:
                     _a.sent();
+                    console.log(process.env.JWT_SECRET);
                     return [4 /*yield*/, fastify.register(jwt_1["default"], {
                             secret: process.env.JWT_SECRET
                         })];

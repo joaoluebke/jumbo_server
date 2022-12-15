@@ -6,14 +6,21 @@ import multerConfig from "../config/multer";
 import UploadImageService from "../services/UploadImageService";
 import DeleteImageService from "../services/DeleteImageService";
 import { ServerResponse } from "http";
+import { authenticate } from "../plugins/authenticate";
 
 const upload = multer(multerConfig);
 
 export async function productRoutes(fastify: FastifyInstance) {
-  fastify.get("/products", async () => {
-    const products = await prisma.product.findMany();
-    return { products };
-  });
+  fastify.get(
+    "/products",
+    {
+      onRequest: [authenticate],
+    },
+    async () => {
+      const products = await prisma.product.findMany();
+      return { products };
+    }
+  );
 
   fastify.get("/products/search/:title", async (request) => {
     const getProductParams = z.object({
@@ -28,114 +35,150 @@ export async function productRoutes(fastify: FastifyInstance) {
     return { products };
   });
 
-  fastify.get("/products/promotions", async () => {
-    const promotions = await prisma.product.findMany({
-      where: {
-        promotion: true,
-      },
-    });
-    return { promotions };
-  });
+  fastify.get(
+    "/products/promotions",
+    {
+      onRequest: [authenticate],
+    },
+    async () => {
+      const promotions = await prisma.product.findMany({
+        where: {
+          promotion: true,
+        },
+      });
+      return { promotions };
+    }
+  );
 
-  fastify.get("/products/:id", async (request) => {
-    const getProductParams = z.object({
-      id: z.string(),
-    });
-    const { id } = getProductParams.parse(request.params);
-    const product = await prisma.product.findMany({
-      where: {
-        id: parseInt(id),
-      },
-    });
+  fastify.get(
+    "/products/:id",
+    {
+      onRequest: [authenticate],
+    },
+    async (request) => {
+      const getProductParams = z.object({
+        id: z.string(),
+      });
+      const { id } = getProductParams.parse(request.params);
+      const product = await prisma.product.findMany({
+        where: {
+          id: parseInt(id),
+        },
+      });
 
-    return { product };
-  });
+      return { product };
+    }
+  );
 
-  fastify.get("/products/subcategories/:subcategoryId", async (request) => {
-    const getCategoryParams = z.object({
-      subcategoryId: z.string(),
-    });
+  fastify.get(
+    "/products/subcategories/:subcategoryId",
+    {
+      onRequest: [authenticate],
+    },
+    async (request) => {
+      const getCategoryParams = z.object({
+        subcategoryId: z.string(),
+      });
 
-    const { subcategoryId } = getCategoryParams.parse(request.params);
+      const { subcategoryId } = getCategoryParams.parse(request.params);
 
-    const productsBySubCategory = await prisma.product.findMany({
-      where: {
-        subCategoryId: parseInt(subcategoryId),
-      },
-    });
+      const productsBySubCategory = await prisma.product.findMany({
+        where: {
+          subCategoryId: parseInt(subcategoryId),
+        },
+      });
 
-    return { productsBySubCategory };
-  });
+      return { productsBySubCategory };
+    }
+  );
 
-  fastify.post("/products", async (request, reply) => {
-    const createProduct = z.object({
-      title: z.string(),
-      description: z.string(),
-      promotion: z.boolean(),
-      price: z.number(),
-      promotionPrice: z.number(),
-      urlImg: z.string(),
-      subCategoryId: z.number(),
-    });
+  fastify.post(
+    "/products",
+    {
+      onRequest: [authenticate],
+    },
+    async (request, reply) => {
+      const createProduct = z.object({
+        title: z.string(),
+        description: z.string(),
+        promotion: z.boolean(),
+        price: z.number(),
+        promotionPrice: z.number(),
+        urlImg: z.string(),
+        subCategoryId: z.number(),
+      });
 
-    const product = createProduct.parse(request.body);
+      const product = createProduct.parse(request.body);
 
-    await prisma.product.create({
-      data: product,
-    });
+      await prisma.product.create({
+        data: product,
+      });
 
-    return reply.status(201).send();
-  });
+      return reply.status(201).send();
+    }
+  );
 
-  fastify.delete("/products/:id", async (request, reply) => {
-    const getProductId = z.object({
-      id: z.string(),
-    });
+  fastify.delete(
+    "/products/:id",
+    {
+      onRequest: [authenticate],
+    },
+    async (request, reply) => {
+      const getProductId = z.object({
+        id: z.string(),
+      });
 
-    const { id } = getProductId.parse(request.params);
+      const { id } = getProductId.parse(request.params);
 
-    await prisma.product.deleteMany({
-      where: {
-        id: parseInt(id),
-      },
-    });
+      await prisma.product.deleteMany({
+        where: {
+          id: parseInt(id),
+        },
+      });
 
-    return reply.status(201).send();
-  });
+      return reply.status(201).send();
+    }
+  );
 
-  fastify.put("/products/:id", async (request, reply) => {
-    const createProduct = z.object({
-      title: z.string(),
-      description: z.string(),
-      promotion: z.boolean(),
-      price: z.number(),
-      promotionPrice: z.number(),
-      subCategoryId: z.number(),
-    });
+  fastify.put(
+    "/products/:id",
+    {
+      onRequest: [authenticate],
+    },
+    async (request, reply) => {
+      const createProduct = z.object({
+        title: z.string(),
+        description: z.string(),
+        promotion: z.boolean(),
+        price: z.number(),
+        promotionPrice: z.number(),
+        subCategoryId: z.number(),
+      });
 
-    const getProductId = z.object({
-      id: z.string(),
-    });
+      const getProductId = z.object({
+        id: z.string(),
+      });
 
-    const { id } = getProductId.parse(request.params);
-    const newProduct = createProduct.parse(request.body);
+      const { id } = getProductId.parse(request.params);
+      const newProduct = createProduct.parse(request.body);
 
-    await prisma.product.update({
-      where: {
-        id: parseInt(id),
-      },
-      data: newProduct,
-    });
+      await prisma.product.update({
+        where: {
+          id: parseInt(id),
+        },
+        data: newProduct,
+      });
 
-    return reply.status(201).send();
-  });
+      return reply.status(201).send();
+    }
+  );
 
   fastify.route({
     method: "POST",
     url: "/upload-file-aws",
     preHandler: upload.single("image"),
     handler: async function (request, reply) {
-      const { file }:any = request;
+      const { file }: any = request;
       const uploadImageService = new UploadImageService();
       const url = await uploadImageService.execute(file);
 
@@ -162,7 +205,7 @@ export async function productRoutes(fastify: FastifyInstance) {
     method: "DELETE",
     url: "/:filename",
     handler: async function (request, reply) {
-      const { filename }:any = request.params;
+      const { filename }: any = request.params;
       const deleteImageService = new DeleteImageService();
       await deleteImageService.execute(filename);
       // request.body contains the text fields

@@ -50,12 +50,15 @@ var fastify_multer_1 = __importDefault(require("fastify-multer"));
 var multer_1 = __importDefault(require("../config/multer"));
 var UploadImageService_1 = __importDefault(require("../services/UploadImageService"));
 var DeleteImageService_1 = __importDefault(require("../services/DeleteImageService"));
+var authenticate_1 = require("../plugins/authenticate");
 var upload = (0, fastify_multer_1["default"])(multer_1["default"]);
 function productRoutes(fastify) {
     return __awaiter(this, void 0, void 0, function () {
         var _this = this;
         return __generator(this, function (_a) {
-            fastify.get("/products", function () { return __awaiter(_this, void 0, void 0, function () {
+            fastify.get("/products", {
+                onRequest: [authenticate_1.authenticate]
+            }, function () { return __awaiter(_this, void 0, void 0, function () {
                 var products;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -83,7 +86,9 @@ function productRoutes(fastify) {
                     }
                 });
             }); });
-            fastify.get("/products/promotions", function () { return __awaiter(_this, void 0, void 0, function () {
+            fastify.get("/products/promotions", {
+                onRequest: [authenticate_1.authenticate]
+            }, function () { return __awaiter(_this, void 0, void 0, function () {
                 var promotions;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -98,7 +103,9 @@ function productRoutes(fastify) {
                     }
                 });
             }); });
-            fastify.get("/products/:id", function (request) { return __awaiter(_this, void 0, void 0, function () {
+            fastify.get("/products/:id", {
+                onRequest: [authenticate_1.authenticate]
+            }, function (request) { return __awaiter(_this, void 0, void 0, function () {
                 var getProductParams, id, product;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -118,7 +125,9 @@ function productRoutes(fastify) {
                     }
                 });
             }); });
-            fastify.get("/products/subcategories/:subcategoryId", function (request) { return __awaiter(_this, void 0, void 0, function () {
+            fastify.get("/products/subcategories/:subcategoryId", {
+                onRequest: [authenticate_1.authenticate]
+            }, function (request) { return __awaiter(_this, void 0, void 0, function () {
                 var getCategoryParams, subcategoryId, productsBySubCategory;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -138,7 +147,9 @@ function productRoutes(fastify) {
                     }
                 });
             }); });
-            fastify.post("/products", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
+            fastify.post("/products", {
+                onRequest: [authenticate_1.authenticate]
+            }, function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
                 var createProduct, product;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -162,7 +173,9 @@ function productRoutes(fastify) {
                     }
                 });
             }); });
-            fastify["delete"]("/products/:id", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
+            fastify["delete"]("/products/:id", {
+                onRequest: [authenticate_1.authenticate]
+            }, function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
                 var getProductId, id;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -182,7 +195,9 @@ function productRoutes(fastify) {
                     }
                 });
             }); });
-            fastify.put("/products/:id", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
+            fastify.put("/products/:id", {
+                onRequest: [authenticate_1.authenticate]
+            }, function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
                 var createProduct, getProductId, id, newProduct;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
