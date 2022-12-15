@@ -32,7 +32,6 @@ export async function userRoutes(fastify: FastifyInstance) {
     });
 
     const user = createUser.parse(request.body);
-
     await prisma.user.create({
       data: user,
     });

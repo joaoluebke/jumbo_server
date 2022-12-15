@@ -4,7 +4,7 @@ import { productRoutes } from "./routes/product";
 import { userRoutes } from "./routes/user";
 import { categoryRoutes } from "./routes/category";
 import { subCategoryRoutes } from "./routes/subCategory";
-// import jwt from "@fastify/jwt";
+import jwt from "@fastify/jwt";
 import multer from "fastify-multer";
 import * as dotenv from 'dotenv';
 dotenv.config() // Load the environment variables
@@ -19,9 +19,9 @@ async function bootstrap() {
     origin: true,
   });
 
-  // await fastify.register(jwt, {
-  //   secret: process.env.JWT_SECRET,
-  // });
+  await fastify.register(jwt, {
+    secret: process.env.JWT_SECRET,
+  });
 
   fastify.register(productRoutes);
   fastify.register(userRoutes);
