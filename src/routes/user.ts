@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { prisma } from "../lib/prisma";
 import { z } from "zod";
+import { hash } from "bcrypt";
 import { authenticate } from "../plugins/authenticate";
 
 export async function userRoutes(fastify: FastifyInstance) {
@@ -10,7 +11,7 @@ export async function userRoutes(fastify: FastifyInstance) {
       onRequest: [authenticate],
     },
     async () => {
-      const users = await prisma.product.findMany();
+      const users = await prisma.user.findMany();
       return { users };
     }
   );
@@ -37,9 +38,6 @@ export async function userRoutes(fastify: FastifyInstance) {
 
   fastify.post(
     "/user",
-    {
-      onRequest: [authenticate],
-    },
     async (request, reply) => {
       const createUser = z.object({
         name: z.string(),
@@ -49,11 +47,23 @@ export async function userRoutes(fastify: FastifyInstance) {
       });
 
       const user = createUser.parse(request.body);
+
+      const userExists = await prisma.user.findUnique({
+        where: {
+          email: user.email,
+        },
+      });
+
+      if (userExists) {
+        throw new Error("Email já cadastrado!");
+      }
+
+      user.password = await hash(user.password, 8);
+
       await prisma.user.create({
         data: user,
       });
-
-      return console.log("usuário: ", user);
+      return { user };
     }
   );
 
@@ -75,7 +85,7 @@ export async function userRoutes(fastify: FastifyInstance) {
         },
       });
 
-      return console.log("usuário deletado");
+      return "usuário deletado";
     }
   );
 

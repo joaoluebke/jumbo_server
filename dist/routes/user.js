@@ -39,6 +39,7 @@ exports.__esModule = true;
 exports.userRoutes = void 0;
 var prisma_1 = require("../lib/prisma");
 var zod_1 = require("zod");
+var bcrypt_1 = require("bcrypt");
 var authenticate_1 = require("../plugins/authenticate");
 function userRoutes(fastify) {
     return __awaiter(this, void 0, void 0, function () {
@@ -50,7 +51,7 @@ function userRoutes(fastify) {
                 var users;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, prisma_1.prisma.product.findMany()];
+                        case 0: return [4 /*yield*/, prisma_1.prisma.user.findMany()];
                         case 1:
                             users = _a.sent();
                             return [2 /*return*/, { users: users }];
@@ -79,12 +80,10 @@ function userRoutes(fastify) {
                     }
                 });
             }); });
-            fastify.post("/user", {
-                onRequest: [authenticate_1.authenticate]
-            }, function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
-                var createUser, user;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
+            fastify.post("/user", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
+                var createUser, user, userExists, _a;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
                         case 0:
                             createUser = zod_1.z.object({
                                 name: zod_1.z.string(),
@@ -93,12 +92,26 @@ function userRoutes(fastify) {
                                 ruleId: zod_1.z.number()
                             });
                             user = createUser.parse(request.body);
+                            return [4 /*yield*/, prisma_1.prisma.user.findUnique({
+                                    where: {
+                                        email: user.email
+                                    }
+                                })];
+                        case 1:
+                            userExists = _b.sent();
+                            if (userExists) {
+                                throw new Error("Email já cadastrado!");
+                            }
+                            _a = user;
+                            return [4 /*yield*/, (0, bcrypt_1.hash)(user.password, 8)];
+                        case 2:
+                            _a.password = _b.sent();
                             return [4 /*yield*/, prisma_1.prisma.user.create({
                                     data: user
                                 })];
-                        case 1:
-                            _a.sent();
-                            return [2 /*return*/, console.log("usuário: ", user)];
+                        case 3:
+                            _b.sent();
+                            return [2 /*return*/, { user: user }];
                     }
                 });
             }); });
@@ -120,7 +133,7 @@ function userRoutes(fastify) {
                                 })];
                         case 1:
                             _a.sent();
-                            return [2 /*return*/, console.log("usuário deletado")];
+                            return [2 /*return*/, "usuário deletado"];
                     }
                 });
             }); });

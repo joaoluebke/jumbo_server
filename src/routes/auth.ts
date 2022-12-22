@@ -33,7 +33,14 @@ export async function authRoutes(fastify: FastifyInstance) {
       { expiresIn: "8h" }
     );
 
-    return { token };
+    const userRestruturado = {
+      name: userExists.name,
+      email: userExists.email,
+      id: userExists.id,
+      ruleId: userExists.ruleId,
+    };
+
+    return { token, userRestruturado };
   });
 
   fastify.get(

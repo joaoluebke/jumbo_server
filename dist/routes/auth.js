@@ -49,7 +49,7 @@ function authRoutes(fastify) {
         var _this = this;
         return __generator(this, function (_a) {
             fastify.post("/login", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
-                var createUser, user, userExists, match, token;
+                var createUser, user, userExists, match, token, userRestruturado;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -75,7 +75,13 @@ function authRoutes(fastify) {
                                 throw new Error("Email ou senha inválido!");
                             }
                             token = fastify.jwt.sign({ id: userExists.id, options: process.env.JWT_SECRET }, { expiresIn: "8h" });
-                            return [2 /*return*/, { token: token }];
+                            userRestruturado = {
+                                name: userExists.name,
+                                email: userExists.email,
+                                id: userExists.id,
+                                ruleId: userExists.ruleId
+                            };
+                            return [2 /*return*/, { token: token, userRestruturado: userRestruturado }];
                     }
                 });
             }); });

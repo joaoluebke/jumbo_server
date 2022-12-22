@@ -13,9 +13,6 @@ const upload = multer(multerConfig);
 export async function productRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/products",
-    {
-      onRequest: [authenticate],
-    },
     async () => {
       const products = await prisma.product.findMany();
       return { products };
@@ -37,9 +34,6 @@ export async function productRoutes(fastify: FastifyInstance) {
 
   fastify.get(
     "/products/promotions",
-    {
-      onRequest: [authenticate],
-    },
     async () => {
       const promotions = await prisma.product.findMany({
         where: {
@@ -52,9 +46,6 @@ export async function productRoutes(fastify: FastifyInstance) {
 
   fastify.get(
     "/products/:id",
-    {
-      onRequest: [authenticate],
-    },
     async (request) => {
       const getProductParams = z.object({
         id: z.string(),
@@ -72,9 +63,6 @@ export async function productRoutes(fastify: FastifyInstance) {
 
   fastify.get(
     "/products/subcategories/:subcategoryId",
-    {
-      onRequest: [authenticate],
-    },
     async (request) => {
       const getCategoryParams = z.object({
         subcategoryId: z.string(),

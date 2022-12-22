@@ -1,35 +1,43 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
-import { productRoutes } from "./routes/product";
-import { userRoutes } from "./routes/user";
-import { categoryRoutes } from "./routes/category";
-import { subCategoryRoutes } from "./routes/subCategory";
 import jwt from "@fastify/jwt";
 import multer from "fastify-multer";
-import * as dotenv from 'dotenv';
-dotenv.config() // Load the environment variables
+import * as dotenv from "dotenv";
+import path from "path";
+import fs from "fs";
+
+import { authRoutes } from "./routes/auth";
+import { userRoutes } from "./routes/user";
+import { productRoutes } from "./routes/product";
+import { categoryRoutes } from "./routes/category";
+import { subCategoryRoutes } from "./routes/subCategory";
+
+dotenv.config();
+
 async function bootstrap() {
   const fastify = Fastify({
     logger: true,
+    http2: true,
+    https: {
+      key: fs.readFileSync(path.join(__dirname, "../src", "ssl", "code.key")),
+      cert: fs.readFileSync(
+        path.join(__dirname, "../src", "ssl", "code.crt")
+      ),
+    },
   });
 
   await fastify.register(multer.contentParser);
 
-  await fastify.register(cors, {
-    origin: true,
-  });
+  await fastify.register(cors, { origin: true });
 
-  console.log(process.env.JWT_SECRET);
+  await fastify.register(jwt, { secret: process.env.JWT_SECRET });
 
-  await fastify.register(jwt, {
-    secret: process.env.JWT_SECRET,
-  });
-
-  fastify.register(productRoutes);
+  fastify.register(authRoutes);
   fastify.register(userRoutes);
+  fastify.register(productRoutes);
   fastify.register(categoryRoutes);
   fastify.register(subCategoryRoutes);
 
-  await fastify.listen({ port: 3333, host: '0.0.0.0' });
+  await fastify.listen({ port: 3333, host: "0.0.0.0" });
 }
 bootstrap();

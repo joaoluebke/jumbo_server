@@ -64,14 +64,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 var fastify_1 = __importDefault(require("fastify"));
 var cors_1 = __importDefault(require("@fastify/cors"));
-var product_1 = require("./routes/product");
-var user_1 = require("./routes/user");
-var category_1 = require("./routes/category");
-var subCategory_1 = require("./routes/subCategory");
 var jwt_1 = __importDefault(require("@fastify/jwt"));
 var fastify_multer_1 = __importDefault(require("fastify-multer"));
 var dotenv = __importStar(require("dotenv"));
-dotenv.config(); // Load the environment variables
+var path_1 = __importDefault(require("path"));
+var fs_1 = __importDefault(require("fs"));
+var auth_1 = require("./routes/auth");
+var user_1 = require("./routes/user");
+var product_1 = require("./routes/product");
+var category_1 = require("./routes/category");
+var subCategory_1 = require("./routes/subCategory");
+dotenv.config();
 function bootstrap() {
     return __awaiter(this, void 0, void 0, function () {
         var fastify;
@@ -79,27 +82,28 @@ function bootstrap() {
             switch (_a.label) {
                 case 0:
                     fastify = (0, fastify_1["default"])({
-                        logger: true
+                        logger: true,
+                        http2: true,
+                        https: {
+                            key: fs_1["default"].readFileSync(path_1["default"].join(__dirname, "../src", "ssl", "code.key")),
+                            cert: fs_1["default"].readFileSync(path_1["default"].join(__dirname, "../src", "ssl", "code.crt"))
+                        }
                     });
                     return [4 /*yield*/, fastify.register(fastify_multer_1["default"].contentParser)];
                 case 1:
                     _a.sent();
-                    return [4 /*yield*/, fastify.register(cors_1["default"], {
-                            origin: true
-                        })];
+                    return [4 /*yield*/, fastify.register(cors_1["default"], { origin: true })];
                 case 2:
                     _a.sent();
-                    console.log(process.env.JWT_SECRET);
-                    return [4 /*yield*/, fastify.register(jwt_1["default"], {
-                            secret: process.env.JWT_SECRET
-                        })];
+                    return [4 /*yield*/, fastify.register(jwt_1["default"], { secret: process.env.JWT_SECRET })];
                 case 3:
                     _a.sent();
-                    fastify.register(product_1.productRoutes);
+                    fastify.register(auth_1.authRoutes);
                     fastify.register(user_1.userRoutes);
+                    fastify.register(product_1.productRoutes);
                     fastify.register(category_1.categoryRoutes);
                     fastify.register(subCategory_1.subCategoryRoutes);
-                    return [4 /*yield*/, fastify.listen({ port: 3333, host: '0.0.0.0' })];
+                    return [4 /*yield*/, fastify.listen({ port: 3333, host: "0.0.0.0" })];
                 case 4:
                     _a.sent();
                     return [2 /*return*/];
