@@ -19,8 +19,6 @@ class S3Storage {
   }
 
   async saveFile(filename: any): Promise<string> {
-    console.log("entrou no save file", filename);
-
     const originalPath = path.resolve(multerConfig.directory, filename);
     const ContentType = originalPath;
 

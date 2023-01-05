@@ -59,7 +59,6 @@ var S3Storage = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        console.log("entrou no save file", filename);
                         originalPath = path_1["default"].resolve(multer_1["default"].directory, filename);
                         ContentType = originalPath;
                         if (!ContentType) {
