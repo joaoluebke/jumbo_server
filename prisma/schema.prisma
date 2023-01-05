@@ -16,7 +16,8 @@ model User {
   email    String @unique
   name     String
   password String
-  ruleId   Int
+  ruleId   Int?
+  urlImg   String?
 }
 
 model Rules {

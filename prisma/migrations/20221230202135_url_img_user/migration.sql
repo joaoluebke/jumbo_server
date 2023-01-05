@@ -4,7 +4,8 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "ruleId" INTEGER NOT NULL,
+    "ruleId" INTEGER,
+    "urlImg" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );

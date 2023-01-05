@@ -67,8 +67,6 @@ var cors_1 = __importDefault(require("@fastify/cors"));
 var jwt_1 = __importDefault(require("@fastify/jwt"));
 var fastify_multer_1 = __importDefault(require("fastify-multer"));
 var dotenv = __importStar(require("dotenv"));
-var path_1 = __importDefault(require("path"));
-var fs_1 = __importDefault(require("fs"));
 var auth_1 = require("./routes/auth");
 var user_1 = require("./routes/user");
 var product_1 = require("./routes/product");
@@ -82,12 +80,7 @@ function bootstrap() {
             switch (_a.label) {
                 case 0:
                     fastify = (0, fastify_1["default"])({
-                        logger: true,
-                        http2: true,
-                        https: {
-                            key: fs_1["default"].readFileSync(path_1["default"].join(__dirname, "../src", "ssl", "code.key")),
-                            cert: fs_1["default"].readFileSync(path_1["default"].join(__dirname, "../src", "ssl", "code.crt"))
-                        }
+                        logger: true
                     });
                     return [4 /*yield*/, fastify.register(fastify_multer_1["default"].contentParser)];
                 case 1:

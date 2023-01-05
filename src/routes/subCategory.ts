@@ -35,6 +35,26 @@ export async function subCategoryRoutes(fastify: FastifyInstance) {
     }
   );
 
+  fastify.get(
+    "/category/:categoryId/subcategories",
+    async (request) => {
+      
+      const getSubCategoryParams = z.object({
+        categoryId: z.string(), 
+      });
+      const { categoryId } = getSubCategoryParams.parse(request.params);
+
+      const subcategory = await prisma.subCategory.findMany({
+        where: {
+          categoryId: parseInt(categoryId),
+        },
+      });
+
+      return { subcategory };
+    }
+  );
+
+
   fastify.post(
     "/subcategories",
     {
@@ -48,11 +68,11 @@ export async function subCategoryRoutes(fastify: FastifyInstance) {
 
       const subCategory = createSubCategory.parse(request.body);
 
-      await prisma.subCategory.create({
+      const subcategory = await prisma.subCategory.create({
         data: subCategory,
       });
 
-      return reply.status(201).send();
+      return reply.status(201).send({ subcategory });
     }
   );
 

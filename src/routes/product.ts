@@ -5,19 +5,15 @@ import multer from "fastify-multer";
 import multerConfig from "../config/multer";
 import UploadImageService from "../services/UploadImageService";
 import DeleteImageService from "../services/DeleteImageService";
-import { ServerResponse } from "http";
 import { authenticate } from "../plugins/authenticate";
 
 const upload = multer(multerConfig);
 
 export async function productRoutes(fastify: FastifyInstance) {
-  fastify.get(
-    "/products",
-    async () => {
-      const products = await prisma.product.findMany();
-      return { products };
-    }
-  );
+  fastify.get("/products", async () => {
+    const products = await prisma.product.findMany();
+    return { products };
+  });
 
   fastify.get("/products/search/:title", async (request) => {
     const getProductParams = z.object({
@@ -32,53 +28,44 @@ export async function productRoutes(fastify: FastifyInstance) {
     return { products };
   });
 
-  fastify.get(
-    "/products/promotions",
-    async () => {
-      const promotions = await prisma.product.findMany({
-        where: {
-          promotion: true,
-        },
-      });
-      return { promotions };
-    }
-  );
+  fastify.get("/products/promotions", async () => {
+    const promotions = await prisma.product.findMany({
+      where: {
+        promotion: true,
+      },
+    });
+    return { promotions };
+  });
 
-  fastify.get(
-    "/products/:id",
-    async (request) => {
-      const getProductParams = z.object({
-        id: z.string(),
-      });
-      const { id } = getProductParams.parse(request.params);
-      const product = await prisma.product.findMany({
-        where: {
-          id: parseInt(id),
-        },
-      });
+  fastify.get("/products/:id", async (request) => {
+    const getProductParams = z.object({
+      id: z.string(),
+    });
+    const { id } = getProductParams.parse(request.params);
+    const product = await prisma.product.findMany({
+      where: {
+        id: parseInt(id),
+      },
+    });
 
-      return { product };
-    }
-  );
+    return { product };
+  });
 
-  fastify.get(
-    "/products/subcategories/:subcategoryId",
-    async (request) => {
-      const getCategoryParams = z.object({
-        subcategoryId: z.string(),
-      });
+  fastify.get("/products/subcategories/:subcategoryId", async (request) => {
+    const getCategoryParams = z.object({
+      subcategoryId: z.string(),
+    });
 
-      const { subcategoryId } = getCategoryParams.parse(request.params);
+    const { subcategoryId } = getCategoryParams.parse(request.params);
 
-      const productsBySubCategory = await prisma.product.findMany({
-        where: {
-          subCategoryId: parseInt(subcategoryId),
-        },
-      });
+    const productsBySubCategory = await prisma.product.findMany({
+      where: {
+        subCategoryId: parseInt(subcategoryId),
+      },
+    });
 
-      return { productsBySubCategory };
-    }
-  );
+    return { productsBySubCategory };
+  });
 
   fastify.post(
     "/products",
@@ -164,9 +151,10 @@ export async function productRoutes(fastify: FastifyInstance) {
   fastify.route({
     method: "POST",
     url: "/upload-file-aws",
-    preHandler: upload.single("image"),
+    preHandler: upload.single("file"),
     handler: async function (request, reply) {
       const { file }: any = request;
+
       const uploadImageService = new UploadImageService();
       const url = await uploadImageService.execute(file);
 
@@ -191,13 +179,29 @@ export async function productRoutes(fastify: FastifyInstance) {
 
   fastify.route({
     method: "DELETE",
-    url: "/:filename",
+    url: "/delete-file/:id/:filename",
     handler: async function (request, reply) {
       const { filename }: any = request.params;
+
       const deleteImageService = new DeleteImageService();
       await deleteImageService.execute(filename);
-      // request.body contains the text fields
-      reply.code(200).send("");
+
+      const getProductId = z.object({
+        id: z.string(),
+      });
+
+      const { id } = getProductId.parse(request.params);
+
+      const product = await prisma.product.update({
+        where: {
+          id: parseInt(id),
+        },
+        data: {
+          urlImg: "",
+        },
+      });
+
+      reply.code(200).send({ product });
     },
   });
 }

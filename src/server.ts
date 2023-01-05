@@ -3,6 +3,7 @@ import cors from "@fastify/cors";
 import jwt from "@fastify/jwt";
 import multer from "fastify-multer";
 import * as dotenv from "dotenv";
+import multipart from "@fastify/multipart";
 import path from "path";
 import fs from "fs";
 
@@ -17,13 +18,13 @@ dotenv.config();
 async function bootstrap() {
   const fastify = Fastify({
     logger: true,
-    http2: true,
-    https: {
-      key: fs.readFileSync(path.join(__dirname, "../src", "ssl", "code.key")),
-      cert: fs.readFileSync(
-        path.join(__dirname, "../src", "ssl", "code.crt")
-      ),
-    },
+    // http2: true,
+    // https: {
+    //   key: fs.readFileSync(path.join(__dirname, "../src", "ssl", "code.key")),
+    //   cert: fs.readFileSync(
+    //     path.join(__dirname, "../src", "ssl", "code.crt")
+    //   ),
+    // },
   });
 
   await fastify.register(multer.contentParser);

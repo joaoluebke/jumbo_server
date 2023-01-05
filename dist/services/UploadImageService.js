@@ -50,6 +50,7 @@ var UploadImageService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         s3Storage = new S3Storage_1["default"]();
+                        console.log('UploadImage');
                         return [4 /*yield*/, s3Storage.saveFile(file.filename)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }

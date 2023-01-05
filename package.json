@@ -16,6 +16,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/multer-s3": "^3.0.0",
     "@types/node": "^18.11.15",
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.1",
@@ -23,8 +24,10 @@
     "typescript": "^4.9.4"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.241.0",
     "@fastify/cors": "^8.2.0",
     "@fastify/jwt": "^6.3.3",
+    "@fastify/multipart": "^7.3.0",
     "@prisma/client": "^4.6.1",
     "@types/multer": "^1.4.7",
     "aws-sdk": "^2.1269.0",
@@ -33,9 +36,11 @@
     "fastify": "^4.10.2",
     "fastify-multer": "^2.0.3",
     "fastify-plugin": "^4.4.0",
+    "form-data": "^4.0.0",
     "https": "^1.0.0",
     "mime": "^3.0.0",
     "multer": "^1.4.5-lts.1",
+    "multer-s3": "^3.0.1",
     "zod": "^3.19.1"
   }
 }

@@ -34,6 +34,7 @@ export async function categoryRoutes(fastify: FastifyInstance) {
       return { category };
     }
   );
+  
 
   fastify.post(
     "/categories",

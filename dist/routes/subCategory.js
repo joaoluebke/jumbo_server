@@ -79,10 +79,30 @@ function subCategoryRoutes(fastify) {
                     }
                 });
             }); });
+            fastify.get("/category/:categoryId/subcategories", function (request) { return __awaiter(_this, void 0, void 0, function () {
+                var getSubCategoryParams, categoryId, subcategory;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            getSubCategoryParams = zod_1.z.object({
+                                categoryId: zod_1.z.string()
+                            });
+                            categoryId = getSubCategoryParams.parse(request.params).categoryId;
+                            return [4 /*yield*/, prisma_1.prisma.subCategory.findMany({
+                                    where: {
+                                        categoryId: parseInt(categoryId)
+                                    }
+                                })];
+                        case 1:
+                            subcategory = _a.sent();
+                            return [2 /*return*/, { subcategory: subcategory }];
+                    }
+                });
+            }); });
             fastify.post("/subcategories", {
                 onRequest: [authenticate_1.authenticate]
             }, function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
-                var createSubCategory, subCategory;
+                var createSubCategory, subCategory, subcategory;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -95,8 +115,8 @@ function subCategoryRoutes(fastify) {
                                     data: subCategory
                                 })];
                         case 1:
-                            _a.sent();
-                            return [2 /*return*/, reply.status(201).send()];
+                            subcategory = _a.sent();
+                            return [2 /*return*/, reply.status(201).send({ subcategory: subcategory })];
                     }
                 });
             }); });

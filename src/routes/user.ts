@@ -4,6 +4,13 @@ import { z } from "zod";
 import { hash } from "bcrypt";
 import { authenticate } from "../plugins/authenticate";
 
+type userEstruct = {
+  name: string;
+  email: string;
+  id: string;
+  ruleId: string;
+};
+
 export async function userRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/users",
@@ -26,6 +33,7 @@ export async function userRoutes(fastify: FastifyInstance) {
         id: z.string(),
       });
       const { id } = getUserParams.parse(request.params);
+
       const user = await prisma.user.findMany({
         where: {
           id: parseInt(id),
@@ -36,36 +44,34 @@ export async function userRoutes(fastify: FastifyInstance) {
     }
   );
 
-  fastify.post(
-    "/user",
-    async (request, reply) => {
-      const createUser = z.object({
-        name: z.string(),
-        email: z.string(),
-        password: z.string(),
-        ruleId: z.number(),
-      });
+  fastify.post("/user", async (request, reply) => {
+    const createUser = z.object({
+      name: z.string(),
+      email: z.string(),
+      password: z.string(),
+      ruleId: z.number(),
+      urlImg: z.string(),
+    });
 
-      const user = createUser.parse(request.body);
+    const user = createUser.parse(request.body);
 
-      const userExists = await prisma.user.findUnique({
-        where: {
-          email: user.email,
-        },
-      });
+    const userExists = await prisma.user.findUnique({
+      where: {
+        email: user.email,
+      },
+    });
 
-      if (userExists) {
-        throw new Error("Email já cadastrado!");
-      }
-
-      user.password = await hash(user.password, 8);
-
-      await prisma.user.create({
-        data: user,
-      });
-      return { user };
+    if (userExists) {
+      throw new Error("Email já cadastrado!");
     }
-  );
+
+    user.password = await hash(user.password, 8);
+
+    await prisma.user.create({
+      data: user,
+    });
+    return { user };
+  });
 
   fastify.delete(
     "/user/:id",

@@ -39,10 +39,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-var aws_sdk_1 = __importDefault(require("aws-sdk"));
-var path_1 = __importDefault(require("path"));
-var multer_1 = __importDefault(require("../config/multer"));
 var fs_1 = __importDefault(require("fs"));
+var path_1 = __importDefault(require("path"));
+var aws_sdk_1 = __importDefault(require("aws-sdk"));
+var multer_1 = __importDefault(require("../config/multer"));
 var S3Storage = /** @class */ (function () {
     function S3Storage() {
         this.client = new aws_sdk_1["default"].S3({
@@ -59,12 +59,13 @@ var S3Storage = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        console.log("entrou no save file", filename);
                         originalPath = path_1["default"].resolve(multer_1["default"].directory, filename);
                         ContentType = originalPath;
                         if (!ContentType) {
                             throw new Error("File not found");
                         }
-                        return [4 /*yield*/, fs_1["default"].promises.readFile(originalPath)];
+                        return [4 /*yield*/, fs_1["default"].promises.readFile(ContentType)];
                     case 1:
                         fileContent = _a.sent();
                         return [4 /*yield*/, this.client

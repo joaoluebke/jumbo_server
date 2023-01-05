@@ -1,8 +1,9 @@
-import aws, { S3 } from "aws-sdk";
-import path from "path";
-
-import multerConfig from "../config/multer";
 import fs from "fs";
+import path from "path";
+import mime from "mime";
+
+import aws, { S3 } from "aws-sdk";
+import multerConfig from "../config/multer";
 
 class S3Storage {
   private client: S3;
@@ -17,7 +18,9 @@ class S3Storage {
     });
   }
 
-  async saveFile(filename: string): Promise<string> {
+  async saveFile(filename: any): Promise<string> {
+    console.log("entrou no save file", filename);
+
     const originalPath = path.resolve(multerConfig.directory, filename);
     const ContentType = originalPath;
 
@@ -25,7 +28,7 @@ class S3Storage {
       throw new Error("File not found");
     }
 
-    const fileContent = await fs.promises.readFile(originalPath);
+    const fileContent = await fs.promises.readFile(ContentType);
     const response = await this.client
       .upload({
         Bucket: "jumbo-app-image",

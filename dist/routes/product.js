@@ -222,7 +222,7 @@ function productRoutes(fastify) {
             fastify.route({
                 method: "POST",
                 url: "/upload-file-aws",
-                preHandler: upload.single("image"),
+                preHandler: upload.single("file"),
                 handler: function (request, reply) {
                     return __awaiter(this, void 0, void 0, function () {
                         var file, uploadImageService, url, getProductId, id, product;
@@ -258,10 +258,10 @@ function productRoutes(fastify) {
             });
             fastify.route({
                 method: "DELETE",
-                url: "/:filename",
+                url: "/delete-file/:id/:filename",
                 handler: function (request, reply) {
                     return __awaiter(this, void 0, void 0, function () {
-                        var filename, deleteImageService;
+                        var filename, deleteImageService, getProductId, id, product;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0:
@@ -270,8 +270,21 @@ function productRoutes(fastify) {
                                     return [4 /*yield*/, deleteImageService.execute(filename)];
                                 case 1:
                                     _a.sent();
-                                    // request.body contains the text fields
-                                    reply.code(200).send("");
+                                    getProductId = zod_1.z.object({
+                                        id: zod_1.z.string()
+                                    });
+                                    id = getProductId.parse(request.params).id;
+                                    return [4 /*yield*/, prisma_1.prisma.product.update({
+                                            where: {
+                                                id: parseInt(id)
+                                            },
+                                            data: {
+                                                urlImg: ""
+                                            }
+                                        })];
+                                case 2:
+                                    product = _a.sent();
+                                    reply.code(200).send({ product: product });
                                     return [2 /*return*/];
                             }
                         });

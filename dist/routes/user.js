@@ -89,7 +89,8 @@ function userRoutes(fastify) {
                                 name: zod_1.z.string(),
                                 email: zod_1.z.string(),
                                 password: zod_1.z.string(),
-                                ruleId: zod_1.z.number()
+                                ruleId: zod_1.z.number(),
+                                urlImg: zod_1.z.string()
                             });
                             user = createUser.parse(request.body);
                             return [4 /*yield*/, prisma_1.prisma.user.findUnique({
