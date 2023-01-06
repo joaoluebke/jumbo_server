@@ -50,7 +50,6 @@ export async function userRoutes(fastify: FastifyInstance) {
       email: z.string(),
       password: z.string(),
       ruleId: z.number(),
-      urlImg: z.string(),
     });
 
     const user = createUser.parse(request.body);
