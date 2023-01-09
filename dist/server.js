@@ -103,7 +103,7 @@ function bootstrap() {
                     fastify.register(product_1.productRoutes);
                     fastify.register(category_1.categoryRoutes);
                     fastify.register(subCategory_1.subCategoryRoutes);
-                    return [4 /*yield*/, fastify.listen({ port: 3333, host: "0.0.0.0" })];
+                    return [4 /*yield*/, fastify.listen({ port: 443, host: "0.0.0.0" })];
                 case 4:
                     _a.sent();
                     return [2 /*return*/];
