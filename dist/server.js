@@ -72,8 +72,8 @@ var user_1 = require("./routes/user");
 var product_1 = require("./routes/product");
 var category_1 = require("./routes/category");
 var subCategory_1 = require("./routes/subCategory");
-// import fs from "fs";
-// import path from "path";
+var fs_1 = __importDefault(require("fs"));
+var path_1 = __importDefault(require("path"));
 dotenv.config();
 function bootstrap() {
     return __awaiter(this, void 0, void 0, function () {
@@ -83,7 +83,11 @@ function bootstrap() {
                 case 0:
                     fastify = (0, fastify_1["default"])({
                         logger: true,
-                        http2: true
+                        http2: true,
+                        https: {
+                            key: fs_1["default"].readFileSync(path_1["default"].join(__dirname, "../src", "ssl", "code.key")),
+                            cert: fs_1["default"].readFileSync(path_1["default"].join(__dirname, "../src", "ssl", "code.crt"))
+                        }
                     });
                     return [4 /*yield*/, fastify.register(fastify_multer_1["default"].contentParser)];
                 case 1:

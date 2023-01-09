@@ -8,8 +8,8 @@ import { userRoutes } from "./routes/user";
 import { productRoutes } from "./routes/product";
 import { categoryRoutes } from "./routes/category";
 import { subCategoryRoutes } from "./routes/subCategory";
-// import fs from "fs";
-// import path from "path";
+import fs from "fs";
+import path from "path";
 
 dotenv.config();
 
@@ -17,12 +17,12 @@ async function bootstrap() {
   const fastify = Fastify({
     logger: true,
     http2: true,
-    // https: {
-    //   key: fs.readFileSync(path.join(__dirname, "../src", "ssl", "code.key")),
-    //   cert: fs.readFileSync(
-    //     path.join(__dirname, "../src", "ssl", "code.crt")
-    //   ),
-    // },
+    https: {
+      key: fs.readFileSync(path.join(__dirname, "../src", "ssl", "code.key")),
+      cert: fs.readFileSync(
+        path.join(__dirname, "../src", "ssl", "code.crt")
+      ),
+    },
   });
 
   await fastify.register(multer.contentParser);
