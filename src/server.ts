@@ -18,12 +18,13 @@ async function bootstrap() {
     logger: true,
     http2: true,
     https: {
-      key: fs.readFileSync(path.join(__dirname, "../src", "ssl", "code.key")),
+      key: fs.readFileSync(path.join(__dirname, "../src", "ssl", "jumbo-decrypted.key")),
       cert: fs.readFileSync(
-        path.join(__dirname, "../src", "ssl", "code.crt")
+        path.join(__dirname, "../src", "ssl", "jumbo.co.ao.crt")
       ),
     },
   });
+
 
   await fastify.register(multer.contentParser);
 

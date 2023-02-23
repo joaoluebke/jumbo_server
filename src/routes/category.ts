@@ -34,7 +34,6 @@ export async function categoryRoutes(fastify: FastifyInstance) {
       return { category };
     }
   );
-  
 
   fastify.post(
     "/categories",
@@ -67,13 +66,22 @@ export async function categoryRoutes(fastify: FastifyInstance) {
       });
 
       const { id } = getCategoryId.parse(request.params);
-      await prisma.category.deleteMany({
+
+      await prisma.subCategory.deleteMany({
         where: {
-          id: parseInt(id),
+          categoryId: parseInt(id),
         },
       });
 
-      return reply.status(201).send();
+      await prisma.category.deleteMany({
+        where: {
+          id: {
+            in: parseInt(id),
+          },
+        },
+      });
+
+      return reply.status(201).send("Deletado com sucesso!");
     }
   );
 

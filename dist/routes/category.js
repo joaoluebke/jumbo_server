@@ -110,14 +110,23 @@ function categoryRoutes(fastify) {
                                 id: zod_1.z.string()
                             });
                             id = getCategoryId.parse(request.params).id;
-                            return [4 /*yield*/, prisma_1.prisma.category.deleteMany({
+                            return [4 /*yield*/, prisma_1.prisma.subCategory.deleteMany({
                                     where: {
-                                        id: parseInt(id)
+                                        categoryId: parseInt(id)
                                     }
                                 })];
                         case 1:
                             _a.sent();
-                            return [2 /*return*/, reply.status(201).send()];
+                            return [4 /*yield*/, prisma_1.prisma.category.deleteMany({
+                                    where: {
+                                        id: {
+                                            "in": parseInt(id)
+                                        }
+                                    }
+                                })];
+                        case 2:
+                            _a.sent();
+                            return [2 /*return*/, reply.status(201).send("Deletado com sucesso!")];
                     }
                 });
             }); });

@@ -85,8 +85,8 @@ function bootstrap() {
                         logger: true,
                         http2: true,
                         https: {
-                            key: fs_1["default"].readFileSync(path_1["default"].join(__dirname, "../src", "ssl", "code.key")),
-                            cert: fs_1["default"].readFileSync(path_1["default"].join(__dirname, "../src", "ssl", "code.crt"))
+                            key: fs_1["default"].readFileSync(path_1["default"].join(__dirname, "../src", "ssl", "jumbo-decrypted.key")),
+                            cert: fs_1["default"].readFileSync(path_1["default"].join(__dirname, "../src", "ssl", "jumbo.co.ao.crt"))
                         }
                     });
                     return [4 /*yield*/, fastify.register(fastify_multer_1["default"].contentParser)];
