@@ -48,7 +48,11 @@ function categoryRoutes(fastify) {
                 var categories;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, prisma_1.prisma.category.findMany()];
+                        case 0: return [4 /*yield*/, prisma_1.prisma.category.findMany({
+                                include: {
+                                    subCategories: true
+                                }
+                            })];
                         case 1:
                             categories = _a.sent();
                             return [2 /*return*/, { categories: categories }];

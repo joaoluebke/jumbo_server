@@ -7,7 +7,13 @@ export async function categoryRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/categories",
     async () => {
-      const categories = await prisma.category.findMany();
+      const categories = await prisma.category.findMany(
+        {
+          include: {
+            subCategories: true
+          }
+        }
+      );
       return { categories };
     }
   );
