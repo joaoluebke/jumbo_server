@@ -55,9 +55,7 @@ function categoryRoutes(fastify) {
                     }
                 });
             }); });
-            fastify.get("/categories/:id", {
-                onRequest: [authenticate_1.authenticate]
-            }, function (request) { return __awaiter(_this, void 0, void 0, function () {
+            fastify.get("/categories/:id", function (request) { return __awaiter(_this, void 0, void 0, function () {
                 var getCategoryParams, id, category;
                 return __generator(this, function (_a) {
                     switch (_a.label) {

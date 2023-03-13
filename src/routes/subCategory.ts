@@ -6,9 +6,6 @@ import { authenticate } from "../plugins/authenticate";
 export async function subCategoryRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/subcategories",
-    {
-      onRequest: [authenticate],
-    },
     async () => {
       const subcategories = await prisma.subCategory.findMany();
       return { subcategories };
@@ -17,9 +14,6 @@ export async function subCategoryRoutes(fastify: FastifyInstance) {
 
   fastify.get(
     "/subcategories/:id",
-    {
-      onRequest: [authenticate],
-    },
     async (request) => {
       const getSubCategoryParams = z.object({
         id: z.string(),

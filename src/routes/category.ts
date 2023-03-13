@@ -14,9 +14,6 @@ export async function categoryRoutes(fastify: FastifyInstance) {
 
   fastify.get(
     "/categories/:id",
-    {
-      onRequest: [authenticate],
-    },
     async (request) => {
       const getCategoryParams = z.object({
         id: z.string(),
