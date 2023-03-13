@@ -19,13 +19,15 @@ export async function authRoutes(fastify: FastifyInstance) {
       },
     });
 
+    let res = "";
+
     if (!userExists) {
-      throw new Error("Email ou senha inválido!");
+      return reply.status(500).send({ res: "Email ou senha inválido!" });
     }
     const match = await bcrypt.compare(user.password, userExists.password);
 
     if (!match) {
-      throw new Error("Email ou senha inválido!");
+      return reply.status(500).send({ res: "Email ou senha inválido!" });
     }
 
     const token = fastify.jwt.sign(

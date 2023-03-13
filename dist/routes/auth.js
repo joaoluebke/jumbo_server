@@ -49,7 +49,7 @@ function authRoutes(fastify) {
         var _this = this;
         return __generator(this, function (_a) {
             fastify.post("/login", function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
-                var createUser, user, userExists, match, token, userRestruturado;
+                var createUser, user, userExists, res, match, token, userRestruturado;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -65,14 +65,15 @@ function authRoutes(fastify) {
                                 })];
                         case 1:
                             userExists = _a.sent();
+                            res = "";
                             if (!userExists) {
-                                throw new Error("Email ou senha inválido!");
+                                return [2 /*return*/, reply.status(500).send({ res: "Email ou senha inválido!" })];
                             }
                             return [4 /*yield*/, bcrypt_1["default"].compare(user.password, userExists.password)];
                         case 2:
                             match = _a.sent();
                             if (!match) {
-                                throw new Error("Email ou senha inválido!");
+                                return [2 /*return*/, reply.status(500).send({ res: "Email ou senha inválido!" })];
                             }
                             token = fastify.jwt.sign({ id: userExists.id, options: process.env.JWT_SECRET }, { expiresIn: "8h" });
                             userRestruturado = {

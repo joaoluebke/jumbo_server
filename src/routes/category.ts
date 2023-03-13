@@ -6,9 +6,6 @@ import { authenticate } from "../plugins/authenticate";
 export async function categoryRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/categories",
-    {
-      onRequest: [authenticate],
-    },
     async () => {
       const categories = await prisma.category.findMany();
       return { categories };
