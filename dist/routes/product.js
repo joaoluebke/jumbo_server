@@ -190,7 +190,7 @@ function productRoutes(fastify) {
             fastify.put("/products/:id", {
                 onRequest: [authenticate_1.authenticate]
             }, function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
-                var createProduct, getProductId, id, newProduct;
+                var createProduct, getProductId, id, newProduct, savedProduct;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -214,8 +214,8 @@ function productRoutes(fastify) {
                                     data: newProduct
                                 })];
                         case 1:
-                            _a.sent();
-                            return [2 /*return*/, reply.status(201).send()];
+                            savedProduct = _a.sent();
+                            return [2 /*return*/, reply.status(201).send(savedProduct)];
                     }
                 });
             }); });

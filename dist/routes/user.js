@@ -137,7 +137,7 @@ function userRoutes(fastify) {
                     }
                 });
             }); });
-            fastify.put("/usuário/:id", {
+            fastify.put("/user/:id", {
                 onRequest: [authenticate_1.authenticate]
             }, function (request) { return __awaiter(_this, void 0, void 0, function () {
                 var createUser, getUserId, id, user;
