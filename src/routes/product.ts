@@ -137,14 +137,14 @@ export async function productRoutes(fastify: FastifyInstance) {
       const { id } = getProductId.parse(request.params);
       const newProduct = createProduct.parse(request.body);
 
-      await prisma.product.update({
+      const savedProduct = await prisma.product.update({
         where: {
           id: parseInt(id),
         },
         data: newProduct,
       });
 
-      return reply.status(201).send();
+      return reply.status(201).send(savedProduct);
     }
   );
 

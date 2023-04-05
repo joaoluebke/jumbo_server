@@ -95,7 +95,7 @@ export async function userRoutes(fastify: FastifyInstance) {
   );
 
   fastify.put(
-    "/usuário/:id",
+    "/user/:id",
     {
       onRequest: [authenticate],
     },
