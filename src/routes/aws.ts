@@ -64,22 +64,42 @@ export async function awsRoutes(fastify: FastifyInstance) {
       const deleteImageService = new DeleteImageService();
       await deleteImageService.execute(filename);
 
-      const getProductId = z.object({
+      const getParams = z.object({
         id: z.string(),
+        type: z.string(),
       });
 
-      const { id } = getProductId.parse(request.params);
+      const { id, type } = getParams.parse(request.body);
 
-      const product = await prisma.product.update({
-        where: {
-          id: parseInt(id),
-        },
-        data: {
-          urlImg: "",
-        },
-      });
+      
 
-      reply.code(200).send({ product });
+
+
+      if (type == "product") {
+        const product = await prisma.product.update({
+          where: {
+            id: parseInt(id),
+          },
+          data: {
+            urlImg: "",
+          },
+        });
+  
+        reply.code(200).send({ product });
+      } else if (type == "banner") {
+        const banner = await prisma.banner.update({
+          where: {
+            id: parseInt(id),
+          },
+          data: {
+            urlImg: "",
+          },
+        });
+  
+        reply.code(200).send({ banner });
+      } else {
+        return "Não deu liga"
+      }
     },
   });
 }

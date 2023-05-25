@@ -111,19 +111,21 @@ function awsRoutes(fastify) {
                 url: "/delete-file/:id/:filename",
                 handler: function (request, reply) {
                     return __awaiter(this, void 0, void 0, function () {
-                        var filename, deleteImageService, getProductId, id, product;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
+                        var filename, deleteImageService, getParams, _a, id, type, product, banner;
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
                                 case 0:
                                     filename = request.params.filename;
                                     deleteImageService = new DeleteImageService_1["default"]();
                                     return [4 /*yield*/, deleteImageService.execute(filename)];
                                 case 1:
-                                    _a.sent();
-                                    getProductId = zod_1.z.object({
-                                        id: zod_1.z.string()
+                                    _b.sent();
+                                    getParams = zod_1.z.object({
+                                        id: zod_1.z.string(),
+                                        type: zod_1.z.string()
                                     });
-                                    id = getProductId.parse(request.params).id;
+                                    _a = getParams.parse(request.body), id = _a.id, type = _a.type;
+                                    if (!(type == "product")) return [3 /*break*/, 3];
                                     return [4 /*yield*/, prisma_1.prisma.product.update({
                                             where: {
                                                 id: parseInt(id)
@@ -133,9 +135,25 @@ function awsRoutes(fastify) {
                                             }
                                         })];
                                 case 2:
-                                    product = _a.sent();
+                                    product = _b.sent();
                                     reply.code(200).send({ product: product });
-                                    return [2 /*return*/];
+                                    return [3 /*break*/, 6];
+                                case 3:
+                                    if (!(type == "banner")) return [3 /*break*/, 5];
+                                    return [4 /*yield*/, prisma_1.prisma.banner.update({
+                                            where: {
+                                                id: parseInt(id)
+                                            },
+                                            data: {
+                                                urlImg: ""
+                                            }
+                                        })];
+                                case 4:
+                                    banner = _b.sent();
+                                    reply.code(200).send({ banner: banner });
+                                    return [3 /*break*/, 6];
+                                case 5: return [2 /*return*/, "Não deu liga"];
+                                case 6: return [2 /*return*/];
                             }
                         });
                     });
