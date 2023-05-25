@@ -19,6 +19,15 @@ CREATE TABLE "Rules" (
 );
 
 -- CreateTable
+CREATE TABLE "Banner" (
+    "id" SERIAL NOT NULL,
+    "title" TEXT NOT NULL,
+    "urlImg" TEXT,
+
+    CONSTRAINT "Banner_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Product" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,

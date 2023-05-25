@@ -89,14 +89,31 @@ function authRoutes(fastify) {
             fastify.get("/me", {
                 onRequest: [authenticate_1.authenticate]
             }, function (request, reply) { return __awaiter(_this, void 0, void 0, function () {
-                var authorization, token;
+                var authorization, token, id, userExists, userRestruturado;
                 return __generator(this, function (_a) {
-                    authorization = request.headers.authorization;
-                    if (!authorization) {
-                        throw new Error("Não autorizado");
+                    switch (_a.label) {
+                        case 0:
+                            authorization = request.headers.authorization;
+                            if (!authorization) {
+                                throw new Error("Não autorizado");
+                            }
+                            token = authorization.split(" ")[1];
+                            id = fastify.jwt.verify(token).id;
+                            return [4 /*yield*/, prisma_1.prisma.user.findUnique({
+                                    where: {
+                                        id: id
+                                    }
+                                })];
+                        case 1:
+                            userExists = _a.sent();
+                            userRestruturado = {
+                                name: userExists.name,
+                                email: userExists.email,
+                                id: userExists.id,
+                                ruleId: userExists.ruleId
+                            };
+                            return [2 /*return*/, { token: token, userRestruturado: userRestruturado }];
                     }
-                    token = authorization.split(" ")[1];
-                    return [2 /*return*/, { token: token }];
                 });
             }); });
             return [2 /*return*/];

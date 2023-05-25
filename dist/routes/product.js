@@ -48,8 +48,6 @@ var prisma_1 = require("../lib/prisma");
 var zod_1 = require("zod");
 var fastify_multer_1 = __importDefault(require("fastify-multer"));
 var multer_1 = __importDefault(require("../config/multer"));
-var UploadImageService_1 = __importDefault(require("../services/UploadImageService"));
-var DeleteImageService_1 = __importDefault(require("../services/DeleteImageService"));
 var authenticate_1 = require("../plugins/authenticate");
 var upload = (0, fastify_multer_1["default"])(multer_1["default"]);
 function productRoutes(fastify) {
@@ -219,78 +217,6 @@ function productRoutes(fastify) {
                     }
                 });
             }); });
-            fastify.route({
-                method: "POST",
-                url: "/upload-file-aws",
-                preHandler: upload.single("file"),
-                handler: function (request, reply) {
-                    return __awaiter(this, void 0, void 0, function () {
-                        var file, uploadImageService, url, getProductId, id, product;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0:
-                                    file = request.file;
-                                    uploadImageService = new UploadImageService_1["default"]();
-                                    return [4 /*yield*/, uploadImageService.execute(file)];
-                                case 1:
-                                    url = _a.sent();
-                                    getProductId = zod_1.z.object({
-                                        id: zod_1.z.string()
-                                    });
-                                    id = getProductId.parse(request.body).id;
-                                    return [4 /*yield*/, prisma_1.prisma.product.update({
-                                            where: {
-                                                id: parseInt(id)
-                                            },
-                                            data: {
-                                                urlImg: url
-                                            }
-                                        })];
-                                case 2:
-                                    product = _a.sent();
-                                    // request.body contains the text fields
-                                    reply.code(200).send({ product: product });
-                                    return [2 /*return*/];
-                            }
-                        });
-                    });
-                }
-            });
-            fastify.route({
-                method: "DELETE",
-                url: "/delete-file/:id/:filename",
-                handler: function (request, reply) {
-                    return __awaiter(this, void 0, void 0, function () {
-                        var filename, deleteImageService, getProductId, id, product;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0:
-                                    filename = request.params.filename;
-                                    deleteImageService = new DeleteImageService_1["default"]();
-                                    return [4 /*yield*/, deleteImageService.execute(filename)];
-                                case 1:
-                                    _a.sent();
-                                    getProductId = zod_1.z.object({
-                                        id: zod_1.z.string()
-                                    });
-                                    id = getProductId.parse(request.params).id;
-                                    return [4 /*yield*/, prisma_1.prisma.product.update({
-                                            where: {
-                                                id: parseInt(id)
-                                            },
-                                            data: {
-                                                urlImg: ""
-                                            }
-                                        })];
-                                case 2:
-                                    product = _a.sent();
-                                    reply.code(200).send({ product: product });
-                                    return [2 /*return*/];
-                            }
-                        });
-                    });
-                }
-            });
             return [2 /*return*/];
         });
     });

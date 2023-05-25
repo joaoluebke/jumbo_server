@@ -3,8 +3,6 @@ import { prisma } from "../lib/prisma";
 import { z } from "zod";
 import multer from "fastify-multer";
 import multerConfig from "../config/multer";
-import UploadImageService from "../services/UploadImageService";
-import DeleteImageService from "../services/DeleteImageService";
 import { authenticate } from "../plugins/authenticate";
 
 const upload = multer(multerConfig);
@@ -148,60 +146,60 @@ export async function productRoutes(fastify: FastifyInstance) {
     }
   );
 
-  fastify.route({
-    method: "POST",
-    url: "/upload-file-aws",
-    preHandler: upload.single("file"),
-    handler: async function (request, reply) {
-      const { file }: any = request;
+  // fastify.route({
+  //   method: "POST",
+  //   url: "/upload-file-aws",
+  //   preHandler: upload.single("file"),
+  //   handler: async function (request, reply) {
+  //     const { file }: any = request;
 
-      const uploadImageService = new UploadImageService();
-      const url = await uploadImageService.execute(file);
+  //     const uploadImageService = new UploadImageService();
+  //     const url = await uploadImageService.execute(file);
 
-      const getProductId = z.object({
-        id: z.string(),
-      });
+  //     const getProductId = z.object({
+  //       id: z.string(),
+  //     });
 
-      const { id } = getProductId.parse(request.body);
+  //     const { id } = getProductId.parse(request.body);
 
-      const product = await prisma.product.update({
-        where: {
-          id: parseInt(id),
-        },
-        data: {
-          urlImg: url,
-        },
-      });
-      // request.body contains the text fields
-      reply.code(200).send({ product });
-    },
-  });
+  //     const product = await prisma.product.update({
+  //       where: {
+  //         id: parseInt(id),
+  //       },
+  //       data: {
+  //         urlImg: url,
+  //       },
+  //     });
+  //     // request.body contains the text fields
+  //     reply.code(200).send({ product });
+  //   },
+  // });
 
-  fastify.route({
-    method: "DELETE",
-    url: "/delete-file/:id/:filename",
-    handler: async function (request, reply) {
-      const { filename }: any = request.params;
+  // fastify.route({
+  //   method: "DELETE",
+  //   url: "/delete-file/:id/:filename",
+  //   handler: async function (request, reply) {
+  //     const { filename }: any = request.params;
 
-      const deleteImageService = new DeleteImageService();
-      await deleteImageService.execute(filename);
+  //     const deleteImageService = new DeleteImageService();
+  //     await deleteImageService.execute(filename);
 
-      const getProductId = z.object({
-        id: z.string(),
-      });
+  //     const getProductId = z.object({
+  //       id: z.string(),
+  //     });
 
-      const { id } = getProductId.parse(request.params);
+  //     const { id } = getProductId.parse(request.params);
 
-      const product = await prisma.product.update({
-        where: {
-          id: parseInt(id),
-        },
-        data: {
-          urlImg: "",
-        },
-      });
+  //     const product = await prisma.product.update({
+  //       where: {
+  //         id: parseInt(id),
+  //       },
+  //       data: {
+  //         urlImg: "",
+  //       },
+  //     });
 
-      reply.code(200).send({ product });
-    },
-  });
+  //     reply.code(200).send({ product });
+  //   },
+  // });
 }

@@ -3,6 +3,11 @@ import { prisma } from "../lib/prisma";
 import { z } from "zod";
 import bcrypt from "bcrypt";
 import { authenticate } from "../plugins/authenticate";
+import fastifyJwt from "@fastify/jwt";
+
+type JwtPayLoad = {
+  id: number;
+};
 
 export async function authRoutes(fastify: FastifyInstance) {
   fastify.post("/login", async (request, reply) => {
@@ -59,7 +64,22 @@ export async function authRoutes(fastify: FastifyInstance) {
 
       const token = authorization.split(" ")[1];
 
-      return { token };
+      let { id } = fastify.jwt.verify(token) as JwtPayLoad;
+
+      const userExists = await prisma.user.findUnique({
+        where: {
+          id: id,
+        },
+      });
+
+      const userRestruturado = {
+        name: userExists!.name,
+        email: userExists!.email,
+        id: userExists!.id,
+        ruleId: userExists!.ruleId,
+      };
+
+      return { token, userRestruturado };
     }
   );
 }
