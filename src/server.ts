@@ -18,13 +18,13 @@ dotenv.config();
 async function bootstrap() {
   const fastify = Fastify({
     logger: true,
-    // http2: true,
-    // https: {
-    //   key: fs.readFileSync(path.join(__dirname, "../src", "ssl", "jumbo-decrypted.key")),
-    //   cert: fs.readFileSync(
-    //     path.join(__dirname, "../src", "ssl", "jumbo.co.ao.crt")
-    //   ),
-    // },
+    http2: true,
+    https: {
+      key: fs.readFileSync(path.join(__dirname, "../src", "ssl", "jumbo-decrypted.key")),
+      cert: fs.readFileSync(
+        path.join(__dirname, "../src", "ssl", "jumbo.co.ao.crt")
+      ),
+    },
   });
 
   await fastify.register(multer.contentParser);
