@@ -50,7 +50,7 @@ export async function awsRoutes(fastify: FastifyInstance) {
         // request.body contains the text fields
         reply.code(200).send({ banner });
       } else {
-        return "Não deu liga"
+        return "Não deu liga";
       }
     },
   });
@@ -66,10 +66,14 @@ export async function awsRoutes(fastify: FastifyInstance) {
 
       const getParams = z.object({
         id: z.string(),
+      });
+
+      const getBody = z.object({
         type: z.string(),
       });
 
-      const { id, type } = getParams.parse(request.body);
+      const { id } = getParams.parse(request.params);
+      const { type } = getBody.parse(request.body);
 
       if (type == "product") {
         const product = await prisma.product.update({
@@ -80,7 +84,7 @@ export async function awsRoutes(fastify: FastifyInstance) {
             urlImg: "",
           },
         });
-  
+
         reply.code(200).send({ product });
       } else if (type == "banner") {
         const banner = await prisma.banner.update({
@@ -91,10 +95,10 @@ export async function awsRoutes(fastify: FastifyInstance) {
             urlImg: "",
           },
         });
-  
+
         reply.code(200).send({ banner });
       } else {
-        return "Não deu liga"
+        return "Não deu liga";
       }
     },
   });

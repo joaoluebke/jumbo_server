@@ -111,20 +111,23 @@ function awsRoutes(fastify) {
                 url: "/delete-file/:id/:filename",
                 handler: function (request, reply) {
                     return __awaiter(this, void 0, void 0, function () {
-                        var filename, deleteImageService, getParams, _a, id, type, product, banner;
-                        return __generator(this, function (_b) {
-                            switch (_b.label) {
+                        var filename, deleteImageService, getParams, getBody, id, type, product, banner;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
                                 case 0:
                                     filename = request.params.filename;
                                     deleteImageService = new DeleteImageService_1["default"]();
                                     return [4 /*yield*/, deleteImageService.execute(filename)];
                                 case 1:
-                                    _b.sent();
+                                    _a.sent();
                                     getParams = zod_1.z.object({
-                                        id: zod_1.z.string(),
+                                        id: zod_1.z.string()
+                                    });
+                                    getBody = zod_1.z.object({
                                         type: zod_1.z.string()
                                     });
-                                    _a = getParams.parse(request.body), id = _a.id, type = _a.type;
+                                    id = getParams.parse(request.params).id;
+                                    type = getBody.parse(request.body).type;
                                     if (!(type == "product")) return [3 /*break*/, 3];
                                     return [4 /*yield*/, prisma_1.prisma.product.update({
                                             where: {
@@ -135,7 +138,7 @@ function awsRoutes(fastify) {
                                             }
                                         })];
                                 case 2:
-                                    product = _b.sent();
+                                    product = _a.sent();
                                     reply.code(200).send({ product: product });
                                     return [3 /*break*/, 6];
                                 case 3:
@@ -149,7 +152,7 @@ function awsRoutes(fastify) {
                                             }
                                         })];
                                 case 4:
-                                    banner = _b.sent();
+                                    banner = _a.sent();
                                     reply.code(200).send({ banner: banner });
                                     return [3 /*break*/, 6];
                                 case 5: return [2 /*return*/, "Não deu liga"];
