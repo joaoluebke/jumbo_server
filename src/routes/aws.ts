@@ -71,10 +71,6 @@ export async function awsRoutes(fastify: FastifyInstance) {
 
       const { id, type } = getParams.parse(request.body);
 
-      
-
-
-
       if (type == "product") {
         const product = await prisma.product.update({
           where: {
